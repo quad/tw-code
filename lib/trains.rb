@@ -1,5 +1,10 @@
 # A solution for a ThoughtWorks code review.
 #
+# The problem involves a bunch of graph manipulation.
+# (http://en.wikipedia.org/wiki/Graph_theory)
+#
+# Thus, a Graph class with the few necessary algorithms implemented as methods.
+#
 # Author:: Scott Robinson <scott@quadhome.com>
 
 module Trains
@@ -79,8 +84,11 @@ module Trains
     end
 
     # Find all routes between two vertices constrained by a condition.
-    #--
-    # A depth-first search without memory.
+    #
+    # The condition is a block that returns whether to continue descending down
+    # an edge.
+    #
+    #-- A depth-first search without memory.
     def all_routes(source_label, destination_label, &condition)
       routes = EdgeArray.new
       stack = [self[source_label]].compact
@@ -111,7 +119,7 @@ module Trains
     
     # Find the shortest routes between two vertices.
     #--
-    # Dijkstra's algorithm.
+    # Dijkstra's algorithm. (http://en.wikipedia.org/wiki/Dijkstra's_algorithm)
     def shortest_route(source_label, destination_label)
       vertices = @distances.collect { |s, d| d.keys << s }.flatten.to_set
 
