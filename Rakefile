@@ -7,8 +7,8 @@ end
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "train 0.1"
+  rdoc.rdoc_dir = 'doc'
+  rdoc.title = "train"
   rdoc.rdoc_files.include('DESIGN*')
   rdoc.rdoc_files.include('PROBLEM*')
   rdoc.rdoc_files.include('README*')
