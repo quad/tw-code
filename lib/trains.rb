@@ -168,10 +168,13 @@ module Trains
       Proc.new { |g| g.route_distance(%w[A D C]) },
       Proc.new { |g| g.route_distance(%w[A E B C D]) },
       Proc.new { |g| g.route_distance(%w[A E D]) },
+      # The number of trips starting at C and ending at C with a maximum of 3 stops.
       Proc.new { |g| g.all_routes('C', 'C') { |p| p.length <= 3 }.length },
+      # The number of trips starting at A and ending at C with exactly 4 stops. 
       Proc.new { |g| g.all_routes('A', 'C') { |p| p.length <= 4 }.reject { |p| p.length != 4 }.length },
       Proc.new { |g| g.shortest_route('A', 'C').distance },
       Proc.new { |g| g.shortest_route('B', 'B').distance },
+      # The number of different routes from C to C with a distance of less than 30.
       Proc.new { |g| g.all_routes('C', 'C') { |p| p.distance < 30 }.length }
     ]
 
