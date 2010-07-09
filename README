@@ -18,8 +18,9 @@ There's also a Rakefile
 
 	$ rake features
 	...
-	28 scenarios (1 undefined, 27 passed)
-	111 steps (2 undefined, 109 passed)
+	41 scenarios (41 passed)
+	153 steps (153 passed)
+	0m3.818s
 
 Well, when you find bugs, I can't claim that "it worked here." ;-)
 
