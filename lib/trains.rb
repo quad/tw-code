@@ -98,6 +98,7 @@ module Trains
           end
         end
 
+        # Backtrack
         stack.last.shift
         while stack.last and stack.last.empty?
           stack.pop
