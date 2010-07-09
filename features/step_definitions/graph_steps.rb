@@ -92,3 +92,19 @@ Then /^there should be edges:$/ do |table|
 
   vertices_are.sort.should == vertices_should.sort
 end
+
+# CLI fun times
+
+When /^I run the program with:$/ do |input|
+  Dir.chdir(File.join(File.dirname(__FILE__), '../../')) do
+    IO.popen("bin/tw-problem /dev/stdin", "w+") do |io|
+      io.puts input
+      io.close_write
+      @output = io.read.chomp
+    end
+  end
+end
+
+Then /^I should see:$/ do |expect|
+  @output.should == expect
+end
