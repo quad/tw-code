@@ -13,12 +13,14 @@ module Trains
   # A struct for graph edges.
   Edge = Struct.new(:from, :to, :distance)
 
+  # A directed graph.
   class Graph
-    SEARCH_DEPTH_LIMIT = 1000   # :nodoc:
+    # Maximum size of the search stack.
+    SEARCH_DEPTH_LIMIT = 1000
 
     # Hash of hashes to edge distances.
     #
-    # @distances[from][to] == Integer
+    #   @distances['A']['B'] == 3
     attr_accessor :distances
 
     class EdgeArray < Array        # :nodoc:
@@ -30,9 +32,8 @@ module Trains
     # Produce a graph from a graph definition.
     #
     # A valid definition is in the format of [A-Z][A-Z][0-9]+.
-    # Punctuation is ignored.
     #
-    # Examples:
+    # Punctuation is ignored.
     #
     #   AB5, BC4, CD8
     #   AD5 CE2 EB3
@@ -72,7 +73,7 @@ module Trains
       return @distances[source_label] && @distances[source_label].collect { |to_l, d| Edge.new(source_label, to_l, d) }
     end
 
-    # The total distance of a route.
+    # Find the distance of a route.
     #--
     # Walk the graph, keep count.
     def route_distance(route_string)
@@ -89,10 +90,11 @@ module Trains
 
     # Find all routes between two vertices constrained by a condition.
     #
-    # The condition is a block that returns whether to continue descending down
-    # an edge.
-    #
-    #-- A depth-first search without memory.
+    # The condition returns boolean whether to continue searching along the
+    # yielded route.
+    #--
+    # A depth-first search without memory.
+    # (http://en.wikipedia.org/wiki/Depth-first_search)
     def all_routes(source_label, destination_label, &condition)
       routes = EdgeArray.new
       stack = [self[source_label]].compact
@@ -138,15 +140,19 @@ module Trains
         end
       end
 
+      # Start searching!
       until vertices.empty?
+        # If there's nothing close, we're done.
         closest = vertices.collect { |l| [cost[l], l] }.reject { |c, v| c.nil? }.min
         break if closest.nil?
 
+        # If we've found our destination, then we're done.
         closest_cost, closest_label = closest
         break if closest_label == destination_label and prev[destination_label]
 
         vertices.delete(closest_label)
 
+        # Look to see if there are any cheaper routes from here.
         if self[closest_label]
           for edge in self[closest_label].select { |e| vertices.include?(e.to) || cost[e.to].nil? }   # Yes, I just did that.
             maybe_new_cost = cost[closest_label] + edge.distance
@@ -174,7 +180,13 @@ module Trains
     end
   end
 
+  # Driver for the problem.
+  #
+  # Looks for "Graph: ..." definitions from supplied files or standard-input.
+  #
+  # Outputs the answers as per PROBLEM.
   class Main
+    # Each sub-problem as a separate procedure.
     OUTPUTS = [
       Proc.new { |g| g.route_distance(%w[A B C]) },
       Proc.new { |g| g.route_distance(%w[A D]) },
