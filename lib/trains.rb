@@ -179,9 +179,7 @@ module Trains
       return puts "Usage: #{$0} [filename ...]" if args.empty?
 
       for ln in $<
-        ln.strip!
-
-        if ln =~ /Graph:(.*)/
+        if ln.strip =~ /Graph:(.*)/
           graph = Graph::parse($1.strip)
 
           OUTPUTS.each_index do |num|
