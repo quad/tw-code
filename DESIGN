@@ -1,0 +1,26 @@
+= Design Considerations
+
+== Welcome to Graph Algorithms, 101.
+
+Problems 1-5 walk a graph. A "walk" function should be sufficient, taking a
+list of destinations.
+
+Problem 6 is finding cycles with a maximum of 3 edges. DFS constrained at a
+maximum of three edges.
+
+Problem 7 is DFS contrained at exactly 4 edges.
+
+Problems 8-9 are shortest path. Dijkstra's algorithm.
+
+Problem 10 is DFS constrained at distance of 30.
+
+== Presumptions
+
+Problem 10 explicitly includes retreaded paths. Thus, I presume memory isn't
+necessary. Instead, I'll cap my depth.
+
+Storing the graph idiomatically in Ruby. This means hash table lookups
+everywhere making any complexity analysis quite bunk. But it also makes the
+code easier to read.
+
+Essentially, I'm handwaving on performance.
