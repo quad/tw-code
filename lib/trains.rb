@@ -23,7 +23,9 @@ module Trains
     #   @distances['A']['B'] == 3
     attr_accessor :distances
 
-    class EdgeArray < Array        # :nodoc:
+    # A specialization of Array for routes.
+    class Route < Array
+      # The total distance of the route.
       def distance
         return self.empty? ? nil : self.inject(0) { |s, e| s += e.distance }
       end
@@ -96,13 +98,13 @@ module Trains
     # A depth-first search without memory.
     # (http://en.wikipedia.org/wiki/Depth-first_search)
     def all_routes(source_label, destination_label, &condition)
-      routes = EdgeArray.new
+      routes = Route.new
       stack = [self[source_label]].compact
 
       until stack.empty?
         raise NoMemoryError, "Too deep (limit of #{SEARCH_DEPTH_LIMIT})" unless stack.length < SEARCH_DEPTH_LIMIT
 
-        path = EdgeArray.new(stack.collect { |edges| edges.first })
+        path = Route.new(stack.collect { |edges| edges.first })
 
         if condition.call(path)
           routes << path if path.last.to == destination_label
@@ -166,12 +168,12 @@ module Trains
       end
 
       # Follow the breadcrumbs home.
-      path = EdgeArray.new [prev[destination_label]].compact
-      while path.first && path.first.from != source_label
-        path.unshift(prev[path.first.from])
+      route = Route.new [prev[destination_label]].compact
+      while route.first && route.first.from != source_label
+        route.unshift(prev[route.first.from])
       end
 
-      return path
+      return route
     end
 
     # Number of vertices.
