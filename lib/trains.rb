@@ -162,15 +162,34 @@ module Trains
   end
 
   class Main
+    OUTPUTS = [
+      Proc.new { |g| g.route_distance(%w[A B C]) },
+      Proc.new { |g| g.route_distance(%w[A D]) },
+      Proc.new { |g| g.route_distance(%w[A D C]) },
+      Proc.new { |g| g.route_distance(%w[A E B C D]) },
+      Proc.new { |g| g.route_distance(%w[A E D]) },
+      Proc.new { |g| g.all_routes('C', 'C') { |p| p.length <= 3 }.length },
+      Proc.new { |g| g.all_routes('A', 'C') { |p| p.length <= 4 }.reject { |p| p.length != 4 }.length },
+      Proc.new { |g| g.shortest_route('A', 'C').distance },
+      Proc.new { |g| g.shortest_route('B', 'B').distance },
+      Proc.new { |g| g.all_routes('C', 'C') { |p| p.distance < 30 }.length }
+    ]
+
     def Main.execute(args)
-      return print "Usage: #{$0} [filename ...]" if args.empty?
+      return puts "Usage: #{$0} [filename ...]" if args.empty?
 
       args.map { |fn| File.open(fn) }.each do |f|
         for ln in f
           ln.strip!
 
           if ln =~ /Graph: (.*)/
-          end
+	    graph = Graph::parse($1)
+
+	    OUTPUTS.each_index do |num|
+	      r = OUTPUTS[num].call(graph)
+	      puts "Output \##{num + 1}: " + (r.nil? ? "NO SUCH ROUTE" : r.to_s)
+	    end
+	  end
         end
       end
     end
