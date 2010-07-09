@@ -64,7 +64,7 @@ Feature: Command-line front-end input and output
 
 		When I run the program with:
 			"""
-			Xyzzy
+			Xyzzy3[0uafio9anfjknsdam,fnsad,mfn
 			"""
 		Then I should see:
 			"""
