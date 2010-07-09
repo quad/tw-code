@@ -13,7 +13,7 @@ module Trains
 
     class EdgeArray < Array        # :nodoc:
       def distance
-        self.reduce(0) { |s, e| s += e.distance }
+        return self.empty? ? nil : self.reduce(0) { |s, e| s += e.distance }
       end
     end
 
@@ -152,7 +152,7 @@ module Trains
         path.unshift(prev[path.first.from])
       end
 
-      return path.empty? ? nil : path
+      return path
     end
 
     # Number of vertices.

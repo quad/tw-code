@@ -69,7 +69,7 @@ Then /^the total distance should be (\d+)$/ do |distance|
 end
 
 Then /^there should be no shortest route!$/ do
-  @route.should be_nil
+  @route.should be_empty
 end
 
 # Exception checking
