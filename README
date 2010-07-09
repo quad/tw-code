@@ -1,6 +1,6 @@
 This is Ruby 1.9.
 
-You use rvm right?
+You use rvm right? (http://rvm.beginrescueend.com/)
 
 	$ rvm use 1.9.2
 
@@ -24,7 +24,7 @@ There's also a Rakefile
 
 Well, when you find bugs, I can't claim that "it worked here." ;-)
 
-	$ bin/tw-problem /dev/stdin
+	$ bin/tw-problem -
 	Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7
 	Output #1: 9
 	Output #2: 5
