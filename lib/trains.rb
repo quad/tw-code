@@ -63,7 +63,7 @@ module Trains
       @distances[source_label] and @distances[source_label].map { |to_l, d| Edge.new(source_label, to_l, d) }
     end
 
-    # The total distance of route.
+    # The total distance of a route.
     #--
     # Walk the graph, keep count.
     def route_distance(route_string)
