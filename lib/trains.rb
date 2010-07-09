@@ -13,7 +13,7 @@ module Trains
 
     class EdgeArray < Array        # :nodoc:
       def distance
-        return self.empty? ? nil : self.reduce(0) { |s, e| s += e.distance }
+        return self.empty? ? nil : self.inject(0) { |s, e| s += e.distance }
       end
     end
 
@@ -41,7 +41,7 @@ module Trains
     # Initialize a graph from a set of edges.
     def initialize(edges)
       # Distances auto-populate temporarily, for ease.
-      @distances = Hash.new { |h, k| h[k] = Hash.new }
+      @distances = Hash.new { |h, k| h[k] = {} }
 
       # A little sanity checking.
       for e in edges
@@ -60,7 +60,7 @@ module Trains
 
     # All edges from a vertex.
     def [](source_label)
-      @distances[source_label] and @distances[source_label].map { |to_l, d| Edge.new(source_label, to_l, d) }
+      return @distances[source_label] && @distances[source_label].collect { |to_l, d| Edge.new(source_label, to_l, d) }
     end
 
     # The total distance of a route.
@@ -69,7 +69,7 @@ module Trains
     def route_distance(route_string)
       sum = 0
 
-      route_string.reduce do |src, dest|
+      route_string.inject do |src, dest|
         return nil unless @distances.fetch(src, {}).key?(dest)
         sum += @distances[src][dest]
         dest
@@ -88,7 +88,7 @@ module Trains
       until stack.empty?
         raise NoMemoryError, "Too deep (limit of #{SEARCH_DEPTH_LIMIT})" unless stack.length < SEARCH_DEPTH_LIMIT
 
-        path = EdgeArray.new(stack.map { |edges| edges.first })
+        path = EdgeArray.new(stack.collect { |edges| edges.first })
 
         if condition.call(path)
           routes << path if path.last.to == destination_label
@@ -100,7 +100,7 @@ module Trains
 
         # Backtrack
         stack.last.shift
-        while stack.last and stack.last.empty?
+        while stack.last && stack.last.empty?
           stack.pop
           stack.last.shift unless stack.empty?
         end
@@ -113,10 +113,10 @@ module Trains
     #--
     # Dijkstra's algorithm.
     def shortest_route(source_label, destination_label)
-      vertices = @distances.map { |s, d| d.keys << s }.flatten.to_set
+      vertices = @distances.collect { |s, d| d.keys << s }.flatten.to_set
 
-      prev = Hash[vertices.map { |l| [l, nil] }]
-      cost = Hash[vertices.map { |l| [l, nil] }]
+      prev = Hash[vertices.collect { |l| [l, nil] }]
+      cost = Hash[vertices.collect { |l| [l, nil] }]
 
       # Frontload the costs from the source vertex.
       if self[source_label]
@@ -127,7 +127,7 @@ module Trains
       end
 
       until vertices.empty?
-        closest = vertices.map { |l| [cost[l], l] }.reject { |c, v| c.nil? }.min
+        closest = vertices.collect { |l| [cost[l], l] }.reject { |c, v| c.nil? }.min
         break if closest.nil?
 
         closest_cost, closest_label = closest
@@ -136,10 +136,10 @@ module Trains
         vertices.delete(closest_label)
 
         if self[closest_label]
-          for edge in self[closest_label].select { |e| vertices.include?(e.to) or cost[e.to].nil? }   # Yes, I just did that.
+          for edge in self[closest_label].select { |e| vertices.include?(e.to) || cost[e.to].nil? }   # Yes, I just did that.
             maybe_new_cost = cost[closest_label] + edge.distance
 
-            if cost[edge.to].nil? or maybe_new_cost < cost[edge.to]
+            if cost[edge.to].nil? || maybe_new_cost < cost[edge.to]
               cost[edge.to] = maybe_new_cost
               prev[edge.to] = edge
             end
@@ -149,7 +149,7 @@ module Trains
 
       # Follow the breadcrumbs home.
       path = EdgeArray.new [prev[destination_label]].compact
-      while path.first and path.first.from != source_label
+      while path.first && path.first.from != source_label
         path.unshift(prev[path.first.from])
       end
 
@@ -158,7 +158,7 @@ module Trains
 
     # Number of vertices.
     def length
-      @distances.reduce(0) { |sum, item| sum += item[1].length }
+      @distances.inject(0) { |sum, item| sum += item[1].length }
     end
   end
 
