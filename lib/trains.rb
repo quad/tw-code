@@ -33,7 +33,7 @@ module Trains
         if edge_s =~ /([A-Z])([A-Z])(\d+)/
           Edge.new($1, $2, $3.to_i)
         else
-          raise ArgumentError, "'#{edge_s}' not in [A-Z][A-Z][0-9] edge format" \
+          raise ArgumentError, "'#{edge_s}' not in [A-Z][A-Z][0-9] edge format"
         end
       end)
     end
