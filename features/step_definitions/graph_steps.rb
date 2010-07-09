@@ -108,3 +108,12 @@ end
 Then /^I should see:$/ do |expect|
   @output.should == expect
 end
+
+Then /^the program should have errored out$/ do
+  $?.should_not == 0
+end
+
+Then /^the program should have exited normally$/ do
+  $?.should == 0
+end
+

@@ -81,3 +81,4 @@ Feature: ThoughtWorks PROBLEM definition
 			Output #9: 9
 			Output #10: 7
 			"""
+		And the program should have exited normally
