@@ -16,13 +16,16 @@ module Trains
   class Graph
     SEARCH_DEPTH_LIMIT = 1000   # :nodoc:
 
+    # Hash of hashes to edge distances.
+    #
+    # @distances[from][to] == Integer
+    attr_accessor :distances
+
     class EdgeArray < Array        # :nodoc:
       def distance
         return self.empty? ? nil : self.inject(0) { |s, e| s += e.distance }
       end
     end
-
-    attr_accessor :distances
 
     # Produce a graph from a graph definition.
     #
