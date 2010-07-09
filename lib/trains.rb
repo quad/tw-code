@@ -178,18 +178,16 @@ module Trains
     def Main.execute(args)
       return puts "Usage: #{$0} [filename ...]" if args.empty?
 
-      args.map { |fn| File.open(fn) }.each do |f|
-        for ln in f
-          ln.strip!
+      for ln in $<
+        ln.strip!
 
-          if ln =~ /Graph: (.*)/
-	    graph = Graph::parse($1)
+        if ln =~ /Graph:(.*)/
+          graph = Graph::parse($1.strip)
 
-	    OUTPUTS.each_index do |num|
-	      r = OUTPUTS[num].call(graph)
-	      puts "Output \##{num + 1}: " + (r.nil? ? "NO SUCH ROUTE" : r.to_s)
-	    end
-	  end
+          OUTPUTS.each_index do |num|
+            r = OUTPUTS[num].call(graph)
+            puts "Output \##{num + 1}: " + (r.nil? ? "NO SUCH ROUTE" : r.to_s)
+          end
         end
       end
     end
