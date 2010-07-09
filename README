@@ -1,0 +1,39 @@
+This is Ruby 1.9.
+
+You use rvm right?
+
+	$ rvm use 1.9.2
+
+	info: Using ruby 1.9.2 preview3
+
+There's a Gemfile.
+
+	$ bundle install
+	...
+	Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+That'll be nice.
+
+There's also a Rakefile
+
+	$ rake features
+	...
+	28 scenarios (1 undefined, 27 passed)
+	111 steps (2 undefined, 109 passed)
+
+Well, when you find bugs, I can't claim that "it worked here." ;-)
+
+	$ bin/tw-problem /dev/stdin
+	Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7
+	Output #1: 9
+	Output #2: 5
+	Output #3: 13
+	Output #4: 22
+	Output #5: NO SUCH ROUTE
+	Output #6: 2
+	Output #7: 3
+	Output #8: 9
+	Output #9: 9
+	Output #10: 7
+
+But I'm sure you have your own test files.
