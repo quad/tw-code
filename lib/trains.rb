@@ -37,7 +37,8 @@ module Trains
     #   AB5, BC4, CD8
     #   AD5 CE2 EB3
     def Graph.parse(definition)
-      Graph.new(definition.split(/[^\w\d]+/).map do |edge_s|
+      tokens = definition.split(/[^\w\d]+/)
+      Graph.new(tokens.collect do |edge_s|
         if edge_s =~ /([A-Z])([A-Z])(\d+)/
           Edge.new($1, $2, $3.to_i)
         else
