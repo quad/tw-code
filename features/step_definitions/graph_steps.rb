@@ -36,7 +36,7 @@ When /^I look for all routes from "([^"]*)" to "([^"]*)" with exactly (\d+) stop
 end
 
 When /^I look for all routes from "([^"]*)" to "([^"]*)" with a distance of less than (\d+)$/ do |source, destination, distance_limit|
-  @routes = @graph.all_routes(source, destination) { |p| route_distance(p) < distance_limit.to_i }
+  @routes = @graph.all_routes(source, destination) { |p| p.distance < distance_limit.to_i }
 end
 
 When /^I look for all routes from "([^"]*)" to "([^"]*)"$/ do |source, destination|
@@ -65,7 +65,7 @@ When /^I look for the shortest route from "([^"]*)" to "([^"]*)"$/ do |source, d
 end
 
 Then /^the total distance should be (\d+)$/ do |distance|
-  route_distance(@route).should == distance.to_i
+  @route.distance.should == distance.to_i
 end
 
 Then /^there should be no shortest route!$/ do

@@ -11,6 +11,12 @@ module Trains
   class Graph
     SEARCH_DEPTH_LIMIT = 1000   # :nodoc:
 
+    class EdgeArray < Array        # :nodoc:
+      def distance
+        self.reduce(0) { |s, e| s += e.distance }
+      end
+    end
+
     attr_accessor :distances
 
     # Produce a graph from a graph definition.
@@ -76,13 +82,13 @@ module Trains
     #--
     # A depth-first search without memory.
     def all_routes(source_label, destination_label, &condition)
-      routes = []
+      routes = EdgeArray.new
       stack = [self[source_label]].compact
 
       until stack.empty?
         raise NoMemoryError, "Too deep (limit of #{SEARCH_DEPTH_LIMIT})" unless stack.length < SEARCH_DEPTH_LIMIT
 
-        path = stack.map { |edges| edges.first }
+        path = EdgeArray.new(stack.map { |edges| edges.first })
 
         if condition.call(path)
           routes << path if path.last.to == destination_label
@@ -141,7 +147,7 @@ module Trains
       end
 
       # Follow the breadcrumbs home.
-      path = [prev[destination_label]].compact
+      path = EdgeArray.new [prev[destination_label]].compact
       while path.first and path.first.from != source_label
         path.unshift(prev[path.first.from])
       end
